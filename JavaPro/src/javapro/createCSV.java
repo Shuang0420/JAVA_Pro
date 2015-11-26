@@ -5,16 +5,12 @@
  */
 package javapro;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Logger;
 import static javapro.Dbconnection.getConnection;
 
 /**
@@ -24,31 +20,22 @@ import static javapro.Dbconnection.getConnection;
 public class createCSV {
         public static void createCSVFile() throws IOException, SQLException {
             File file = new File("temp10.csv");
+            File file2 = new File("temp11.csv");
             if (!file.exists()) {
             FileWriter fw = new FileWriter("temp10.csv");
+            FileWriter fw2 = new FileWriter("temp11.csv");
             
             fw.write("salary, info\n");
+            fw2.write("salary, GPA\n");
             
             getConnection();
             ResultSet rs = null;
-            //StringBuilder sb = null;
             Statement stat = null;
             stat = Dbconnection.conn.createStatement();
             rs = stat.executeQuery("select * from studentinfor.student2");
-            while(rs.next()) {
-                /**
-                StringBuilder sb = null;
-                for (int i=1; i < 10; i++) {
-                    sb.append(rs.getString(i));
-                    sb.append(" ");
-                    System.out.println(sb);
-                }
-                for (int i=12; i < 25; i++) {
-                    sb.append(rs.getString(i));
-                    sb.append(" ");
-                }
-                */
-                fw.write(rs.getString(25) + "," 
+            while(rs.next()) {              
+                String GPA = rs.getString("GPA");
+                fw.write(rs.getString("salaryDegree") + "," 
                         + rs.getString("educationfield") + " " 
                         + rs.getString("Course") + " " 
                         + rs.getString("PostOrUnder") + " " 
@@ -66,14 +53,14 @@ public class createCSV {
                         + rs.getString("Equitydata") + " " */
                         + rs.getString("Coursecompletionyear") + " "
                         + rs.getString("Highesteducationalattainment") + " " 
-                        + rs.getString("GPA") + " " 
+                        + GPA + " " 
                         + rs.getString("Modeofattendance") + " " 
                         + rs.getString("GraduateGrade") + " " 
                         + "\n");
-                //sb = null;
+                fw2.write(rs.getString("salary")  + "," + GPA + "\n");
             }
             fw.close();
-            System.out.println("create successful");
+            fw2.close();
         } 
         }
         
