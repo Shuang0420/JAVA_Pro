@@ -50,10 +50,17 @@ public class WekaTest {
         }  
     }
     
-    public static void cluster() {
+    public static void cluster(String str) {
         try {
             Instances data = createInstances(new File("temp11.csv"));
-            data.deleteAttributeAt(1);
+            if (str.equals("salary")) 
+                data.deleteAttributeAt(1);
+            else if (str.equals("GPA"))
+                data.deleteAttributeAt(0);
+            else {
+                System.out.println("cannot cluster");
+                System.exit(0);
+            }
             
             SimpleKMeans model = new SimpleKMeans();//simpe em
             model.setNumClusters(2);//number of clusters
@@ -78,7 +85,8 @@ public class WekaTest {
     public static void main(String[] args) throws Exception {
         createCSV.createCSVFile();
         classify();
-        cluster();
+        cluster("salary");
+        cluster("GPA");
     }
     
 }
